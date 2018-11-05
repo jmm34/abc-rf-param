@@ -96,18 +96,18 @@ quant.theta2.test.freq <- matrix(NA, p, 2)
 for (i in 1:p) {
   theta1.test.exact[i] <- sum(y.test[i, ]) / (n + 1)
   var1.test.exact[i] <-
-    (1 / (n + 1)) * (beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2) / 2) /
-    (alpha - 1 + n / 2)
+    (beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2)/2 + n*(mean(y.test[i, ]))^2 / (2*(n+1))  ) /
+    ( (n + 1) * (alpha - 1 + n / 2) )
   theta2.test.exact[i] <-
-    (beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2) / 2) / (alpha - 1 + n / 2)
+    (beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2)/2 + n*(mean(y.test[i, ]))^2 / (2*(n+1))  ) / (alpha - 1 + n / 2)
   var2.test.exact[i] <-
-    (beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2) / 2) ^ 2 / ((alpha - 1 + n / 2) ^ 2 * (alpha - 2 + n / 2))
+    (beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2)/2 + n*(mean(y.test[i, ]))^2 / (2*(n+1))  ) ^ 2 / ((alpha - 1 + n / 2) ^ 2 * (alpha - 2 + n / 2))
   quant.theta1.test.freq[i, ] <-
-    c(qnst(0.025, n + 2 * alpha, sum(y.test[i, ]) / (n + 1), sqrt((2 * beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2 )) / ((n + 1) * (n + 2 * alpha) ))),
-      qnst(0.975, n + 2 * alpha, sum(y.test[i, ]) / (n + 1), sqrt((2 * beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2 )) / ((n + 1) * (n + 2 * alpha) ))))
+    c(qnst(0.025, n + 2 * alpha, sum(y.test[i, ]) / (n + 1), sqrt(2 * (beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2)/2 + n*(mean(y.test[i, ]))^2 / (2*(n+1))  ) / ((n + 1) * (n + 2 * alpha) ))),
+      qnst(0.975, n + 2 * alpha, sum(y.test[i, ]) / (n + 1), sqrt(2 * (beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2)/2 + n*(mean(y.test[i, ]))^2 / (2*(n+1))  ) / ((n + 1) * (n + 2 * alpha) ))))
   quant.theta2.test.freq[i, ] <- 
-    c(1 / qgamma(0.975, shape = (n + 2 * alpha) / 2, rate = (2 * beta + sum(( y.test[i, ] - mean(y.test[i, ]) ) ^ 2)) / 2 ),
-      1 / qgamma(0.025, shape = (n + 2 * alpha) / 2, rate = (2 * beta + sum(( y.test[i, ] - mean(y.test[i, ]) ) ^ 2)) / 2 ))
+    c(1 / qgamma(0.975, shape = (n + 2 * alpha) / 2, rate = (beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2)/2 + n*(mean(y.test[i, ]))^2 / (2*(n+1))  ) ),
+      1 / qgamma(0.025, shape = (n + 2 * alpha) / 2, rate = (beta + sum((y.test[i, ] - mean(y.test[i, ])) ^ 2)/2 + n*(mean(y.test[i, ]))^2 / (2*(n+1))  )) )
 }
 
 # Add nNoise summary statistics simulated according 
